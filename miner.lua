@@ -105,7 +105,7 @@ end
 if x = 0 then -- new mine!!
 	dumpInv()
 	getItems()
-	
+
 	robot.turnLeft()
 	for i = 1, length / 2 do
 		mineForward()
@@ -121,22 +121,22 @@ if x = 0 then -- new mine!!
 	forward()
 	forward()
 	robot.turnLeft()
-	
+
 	x = x + 1
 	network.send(robot.name() .. ": Mined out my 1st row! <3")
-end
+	end
 
-while true do
+	while true do
 
-	
-	
+
+
 	dumpInv()
 	getItems()
-	
+
 	for i = 1, length do
 		mineForward()
 	end
-	
+
 	if left then
 		robot.turnRight()
 		robot.forward()
@@ -152,9 +152,9 @@ while true do
 		robot.turnLeft()
 		left = true
 	end
-	
+
 	x = x + 1
-	
+
 	if math.floor(x/10) == x / 10 then
 		network.send(robot.name() .. ": Mined out my " .. x .. "th row! <3")
 	else
