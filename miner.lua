@@ -15,10 +15,10 @@ local left = false -- the starting side. only change if the mine has already bee
 local event = require("event")
 local robot = require("robot")
 local component = require("component")
-local network = component.modem
+local network = component.tunnel
 local generator = component.generator
 
-local torches = math.random(8,12)
+local torch = math.random(8,12)
 
 function forward()
 	while true do
@@ -65,7 +65,7 @@ function getItems()
 
 	-- check coal, and consume it
 	robot.select(2)
-	if count() < 64 then
+	if robot.count() < 64 then
 		local numOfCoal = robot.count()
 		if not generator.insert(numOfCoal - 1) then
 			network.send(robot.name() .. ": Turning off. There is a non-coal in my coal slot ;(")
@@ -92,17 +92,18 @@ function getItems()
 	end
 	
 	-- grab ender chest back
-	robot.swingDown()
+	robot.swingDown(nil, true)
+end
+
+function pong()
+	network.send(robot.name() .. ": Pong!")
 end
 
 -- MAIN
 
 event.listen("modem_message", pong)
-function pong()
-	network.send(robot.name() .. ": Pong!")
-end
 
-if x = 0 then -- new mine!!
+if x == 0 then -- new mine!!
 	dumpInv()
 	getItems()
 
@@ -124,11 +125,9 @@ if x = 0 then -- new mine!!
 
 	x = x + 1
 	network.send(robot.name() .. ": Mined out my 1st row! <3")
-	end
+end
 
-	while true do
-
-
+while true do
 
 	dumpInv()
 	getItems()
@@ -139,16 +138,16 @@ if x = 0 then -- new mine!!
 
 	if left then
 		robot.turnRight()
-		robot.forward()
-		robot.forward()
-		robot.forward()
+		forward()
+		forward()
+		forward()
 		robot.turnRight()
 		left = false
 	else
 		robot.turnLeft()
-		robot.forward()
-		robot.forward()
-		robot.forward()
+		forward()
+		forward()
+		forward()
 		robot.turnLeft()
 		left = true
 	end
