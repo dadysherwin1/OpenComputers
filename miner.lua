@@ -16,7 +16,7 @@ local placeTorches = true
 local event = require("event")
 local robot = require("robot")
 local component = require("component")
-local invController = require("inventory_controller")
+local invController = component.inventory_controller
 local network = component.tunnel
 local generator = component.generator
 
