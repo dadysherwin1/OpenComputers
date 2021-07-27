@@ -9,6 +9,7 @@
 local length = 200 -- how wide should it mine
 local x = 0 -- the starting row. only change if the mine has already been started
 local left = false -- the starting side. only change if the mine has already been started
+local placeTorches = true
 
 -- FUNCTIONS
 
@@ -32,11 +33,13 @@ function mineForward()
 		robot.swing()
 		if robot.forward() then break end
 	end
-  
-	torch = torch - 1
-	if torch <= 0 then
-	robot.placeDown()
-	torch = math.random(8,12)
+  	
+	if placeTorches then
+		torch = torch - 1
+		if torch <= 0 then
+			robot.placeDown()
+			torch = math.random(8,12)
+		end
 	end
 end
 
@@ -54,6 +57,10 @@ function dumpInv()
 	
 	-- drop all items
 	local numOfSlots = robot.inventorySize()
+	if placeTorches then
+		robot.select(1)
+		robot.dropDown()
+	end
 	for i = 3, numOfSlots do
 		robot.select(i)
 		robot.dropDown()
@@ -74,21 +81,17 @@ function getItems()
 	end
 
 	-- check torches
-	robot.select(4)
-	robot.suckDown(1)
-	if not robot.compareTo(1) then
-		network.send(robot.name() .. ": Turning off. Either there's no torches left, or I ran outta torches a while ago ;(")
-		os.exit()
-	end
-	robot.dropDown()
-	
-	-- grab some torches
-	robot.select(1)
-	local torchesRequired = robot.space()
-	robot.suckDown(torchesRequired)
-	if robot.count() < 30 then
-		network.send(robot.name() .. ": Turning off. Not enough torches ;(")
-		os.exit()
+	if placeTorches then
+
+		-- grab some torches
+		robot.select(1)
+		local torchesRequired = robot.space()
+		robot.suckDown(torchesRequired)
+		if robot.count() < 30 then
+			network.send(robot.name() .. ": Turning off. Not enough torches ;(")
+			os.exit()
+		end
+		
 	end
 	
 	-- grab ender chest back
@@ -137,19 +140,19 @@ while true do
 	end
 
 	if left then
-		robot.turnRight()
-		forward()
-		forward()
-		forward()
-		robot.turnRight()
 		left = false
+		robot.turnLeft()
+		forward()
+		forward()
+		forward()
+		robot.turnLeft()
 	else
-		robot.turnLeft()
-		forward()
-		forward()
-		forward()
-		robot.turnLeft()
 		left = true
+		robot.turnRight()
+		forward()
+		forward()
+		forward()
+		robot.turnRight()
 	end
 
 	x = x + 1
