@@ -16,6 +16,7 @@ local placeTorches = true
 local event = require("event")
 local robot = require("robot")
 local component = require("component")
+local invController = require("inventory_controller")
 local network = component.tunnel
 local generator = component.generator
 
@@ -57,7 +58,7 @@ function dumpInv()
 	
 	-- drop all items
 	local numOfSlots = robot.inventorySize()
-	if placeTorches then
+	if not placeTorches then
 		robot.select(1)
 		robot.dropDown()
 	end
@@ -86,7 +87,7 @@ function getItems()
 		-- grab some torches
 		robot.select(1)
 		local torchesRequired = robot.space()
-		robot.suckDown(torchesRequired)
+		invController.suckFromSlot(0,1,torchesRequired)
 		if robot.count() < 30 then
 			network.send(robot.name() .. ": Turning off. Not enough torches ;(")
 			os.exit()
