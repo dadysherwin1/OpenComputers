@@ -2,13 +2,12 @@
 
 -- first slot = torches
 -- second slot = coal
--- third slot = ender chest
+-- second slot = ender chest
+-- third slot = diamond pick
 
 -- CONFIGS
 
 local length = 200 -- how wide should it mine
-local x = 0 -- the starting row. only change if the mine has already been started
-local left = false -- the starting side. only change if the mine has already been started
 local placeTorches = true
 
 -- FUNCTIONS
@@ -21,6 +20,7 @@ local network = component.tunnel
 local generator = component.generator
 
 local torch = math.random(8,12)
+local left = false
 
 function forward()
 	while true do
@@ -51,7 +51,7 @@ function dumpInv()
 	if not robot.placeDown() then
 		robot.swingDown()
 		if not robot.placeDown() then
-			network.send(robot.name() .. ": Turning off. Couldn't place down ender chest ;(")
+			network.send(robot.name(), 2)
 			os.exit()
 		end	
 	end
@@ -62,7 +62,7 @@ function dumpInv()
 		robot.select(1)
 		robot.dropDown()
 	end
-	for i = 3, numOfSlots do
+	for i = 5, numOfSlots do
 		robot.select(i)
 		robot.dropDown()
 	end
@@ -73,30 +73,35 @@ function getItems()
 
 	-- check coal, and consume it
 	robot.select(2)
-	if robot.count() < 64 then
-		local numOfCoal = robot.count()
-		if not generator.insert(numOfCoal - 1) then
-			network.send(robot.name() .. ": Turning off. There is a non-coal in my coal slot ;(")
-			os.exit()
+	generator.insert(64)
+	if robot.count() < 32 then
+		robot.select(2)
+		local coalNeeded = robot.space()
+		for i = 2, 27 do
+			if invController.getStackInSlot(0, i) == getStackInInternalSlot(2) then
+				invController.suckFromSlot(0, i, coalNeeded)
+				if robot.space() == 0 then break end
+			end
 		end
 	end
 
 	-- check torches
 	if placeTorches then
-
 		-- grab some torches
 		robot.select(1)
 		local torchesRequired = robot.space()
 		invController.suckFromSlot(0,1,torchesRequired)
-		if robot.count() < 30 then
-			network.send(robot.name() .. ": Turning off. Not enough torches ;(")
-			os.exit()
-		end
-		
 	end
 	
 	-- grab ender chest back
+	robot.select(4)
+	invController.equip()
+	robot.select(3)
 	robot.swingDown(nil, true)
+	robot.select(4)
+	invController.equip()
+	
+	robot.select(1)
 end
 
 function pong()
@@ -107,7 +112,7 @@ end
 
 event.listen("modem_message", pong)
 
-if x == 0 then -- new mine!!
+if row == 0 then -- new mine!!
 	dumpInv()
 	getItems()
 
@@ -128,7 +133,7 @@ if x == 0 then -- new mine!!
 	robot.turnLeft()
 
 	x = x + 1
-	network.send(robot.name() .. ": Mined out my 1st row! <3")
+	network.send(robot.name(), 1, x)
 end
 
 while true do
@@ -140,14 +145,14 @@ while true do
 		mineForward()
 	end
 
-	if left then
+	if left then -- if we are now on the right side
 		left = false
 		robot.turnLeft()
 		forward()
 		forward()
 		forward()
 		robot.turnLeft()
-	else
+	else -- if we are now on the left side
 		left = true
 		robot.turnRight()
 		forward()
