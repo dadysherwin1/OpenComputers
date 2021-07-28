@@ -21,12 +21,14 @@ local generator = component.generator
 
 local torch = math.random(8,12)
 local left = false
+local moveCount = 0
 
 function forward()
 	while true do
 		if robot.forward() then break end
 		robot.swing()
 	end
+	moveCount = moveCount + 1
 end
 
 function mineForward()
@@ -34,6 +36,7 @@ function mineForward()
 		robot.swing()
 		if robot.forward() then break end
 	end
+	moveCount = moveCount + 1
   	
 	if placeTorches then
 		torch = torch - 1
