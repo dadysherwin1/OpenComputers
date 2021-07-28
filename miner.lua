@@ -81,7 +81,7 @@ function getItems()
 		robot.select(2)
 		local coalNeeded = robot.space()
 		for i = 2, 27 do
-			if invController.getStackInSlot(0, i) == getStackInInternalSlot(2) then
+			if invController.getStackInSlot(0, i).name == invController.getStackInInternalSlot(2).name then
 				invController.suckFromSlot(0, i, coalNeeded)
 				if robot.space() == 0 then break end
 			end
