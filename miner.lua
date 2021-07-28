@@ -73,7 +73,7 @@ function getItems()
 
 	-- check coal, and consume it
 	robot.select(2)
-	generator.insert(64)
+	generator.insert(robot.count() - 1)
 	if robot.count() < 32 then
 		robot.select(2)
 		local coalNeeded = robot.space()
