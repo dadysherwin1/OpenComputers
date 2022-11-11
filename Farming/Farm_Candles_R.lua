@@ -88,13 +88,13 @@ function dumpInv()
     local string = robot.count() - 32
     robot.select(15)
     local dye = robot.count() - 32
-    local candlesCraftable = math.min(wax, string, dye)
+    local candlesCraftable = math.min(wax, string, dye, 16)
     if candlesCraftable > 0 then
         robot.select(13)
         robot.transferTo(1, wax + 32)
         robot.select(14)
         robot.transferTo(2, string + 32)
-        crafting.craft()
+        crafting.craft(candlesCraftable * 4)
 
         robot.select(15)
         robot.transferTo(6, dye + 32)
@@ -110,10 +110,11 @@ function dumpInv()
         robot.transferTo(2, candlesCraftable)
         robot.transferTo(3, candlesCraftable)
         robot.transferTo(5, candlesCraftable)
-        robot.select(1)
         crafting.craft()
 
         robot.drop(3)
+        robot.select(6)
+        robot.transferTo(15)
     end
 
 end
