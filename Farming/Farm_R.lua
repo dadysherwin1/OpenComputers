@@ -1,3 +1,7 @@
+-- A robot that does good ol' honest work
+-- Robot: CPU & Memory Tier 2, Geolyzer, Crafting Upgrade, Inventory Controller Upgrade, Inventory Upgrade, Tractor Beam (w/ Upgrade Container)
+-- Robot needs a BIOS with this script flashed on it
+
 local robot = component.proxy(component.list("robot")())
 local geolyzer = component.proxy(component.list("geolyzer")())
  

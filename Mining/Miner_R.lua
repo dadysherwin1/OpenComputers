@@ -1,7 +1,8 @@
 -- Makes 1 half of a mine, pls config rightHalf
 -- Robot: CPU Tier 2, Chunkloader, Experience, Generator, Hover, 4 Inv Upgrades, Inv Controller, Database 1
--- Robot needs Open OS, and home/.shrc must run home/miner (this script)
+-- Robot needs a BIOS with this script flashed on it
 -- 1 = coal, 2 = ore chest, 3 = torches, 4 = torch chest
+
 -- CONFIGS:
 local rightHalf = false
 local homeSide = true

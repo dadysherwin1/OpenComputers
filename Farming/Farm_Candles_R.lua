@@ -1,5 +1,8 @@
+-- Makes a bunch of candles on a farm
+-- Robot: CPU & Memory Tier 1, Crafting Upgrade, Inventory Controller Upgrade, Inventory Upgrade, Tractor Beam (w/ Upgrade Container)
+-- Robot needs a BIOS with this script flashed on it
+
 local robot = component.proxy(component.list("robot")())
-local geolyzer = component.proxy(component.list("geolyzer")())
 local crafting = component.proxy(component.list("crafting")())
 
 local seedSlot = 8
