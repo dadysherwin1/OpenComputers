@@ -1,6 +1,6 @@
 -- Makes 1 half of a mine, pls config rightHalf
--- Robot: CPU Tier 2, Chunkloader, Experience, Generator, Hover, 4 Inv Upgrades, Inv Controller, Database 1
--- Robot needs a BIOS with this script flashed on it
+-- Robot: CPU & Memory Tier 2, Chunkloader, Experience, Generator, Hover, 4 Inv Upgrades, Inv Controller, Database (w/ Upgrade Container)
+-- Robot needs a harddrive with home/.shrc running this script
 -- 1 = coal, 2 = ore chest, 3 = torches, 4 = torch chest
 
 -- CONFIGS:
@@ -9,10 +9,11 @@ local homeSide = true
 local length = 160
 local startRow = 1
 
-local robot = component.proxy(component.list("robot")())
-local database = component.proxy(component.list("database")())
-local inv = component.proxy(component.list("inventory_controller")())
-local generator = component.proxy(component.list("generator")())
+local component = require("component")
+local robot = component.robot
+local database = component.database
+local inv = component.inventory_controller
+local generator = component.generator
 
 local torchCount = 1
 local row = 0
