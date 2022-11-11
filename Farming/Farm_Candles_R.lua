@@ -94,7 +94,6 @@ function dumpInv()
         robot.transferTo(1, wax + 32)
         robot.select(14)
         robot.transferTo(2, string + 32)
-        robot.select(1)
         crafting.craft()
 
         robot.select(15)
