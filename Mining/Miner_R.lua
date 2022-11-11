@@ -8,11 +8,10 @@ local homeSide = true
 local length = 160
 local startRow = 1
 
-local component = require("component")
-local robot = component.robot
-local database = component.database
-local inv = component.inventory_controller
-local generator = component.generator
+local robot = component.proxy(component.list("robot")())
+local database = component.proxy(component.list("database")())
+local inv = component.proxy(component.list("inventory_controller")())
+local generator = component.proxy(component.list("generator")())
 
 local torchCount = 1
 local row = 0
