@@ -1,5 +1,5 @@
 -- Makes 1 half of a mine, pls config rightHalf
--- Robot: CPU & Memory Tier 2, Chunkloader, Experience, Generator, Hover, 4 Inv Upgrades, Inv Controller, Database (w/ Upgrade Container)
+-- Robot: CPU & Memory Tier 2, Chunkloader, Angel Upgrade, Experience Upgrade, Generator Upgrade, 4 Inv Upgrades, Inv Controller Upgrade, Database (w/ Upgrade Container), Hover (w/ Upgrade Container)
 -- Robot needs a harddrive with home/.shrc running this script
 -- 1 = coal, 2 = ore chest, 3 = torches, 4 = torch chest
 
