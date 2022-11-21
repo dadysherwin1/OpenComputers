@@ -22,8 +22,7 @@ function mine()
     robot.swing(3)
     forward()
     torchCount = torchCount - 1
-    if torchCount == 0 and inv.getStackInInternalSlot(3) and inv.getStackInInternalSlot(3).label ==
-        database.get(3).label then
+    if torchCount == 0 and inv.getStackInInternalSlot(3) and inv.getStackInInternalSlot(3).label == database.get(3).label then
         torchCount = 10
         robot.select(3)
         if not robot.place(0) then
