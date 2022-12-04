@@ -1,13 +1,16 @@
--- Makes 1 half of a mine, pls config rightHalf
+-- Makes 1 half of a mine, pls config goRight
 -- Robot: CPU & Memory Tier 2, Chunkloader, Angel Upgrade, Experience Upgrade, Generator Upgrade, 4 Inv Upgrades, Inv Controller Upgrade, Database (w/ Upgrade Container), Hover (w/ Upgrade Container)
 -- Robot needs a harddrive with home/.shrc running this script
--- 1 = coal, 2 = ore chest, 3 = torches, 4 = torch chest
+
+-- 1 = coal, 2 = ore chest, 3 = torches (optional), 4 = torch chest (optional)
+-- OR (netherMode == true)
+-- 1 = fuel chest, 2 = ore chest, 3 = torches (optional), 4 = torch chest (optional)
 
 -- CONFIGS:
-local rightHalf = false
-local homeSide = true
+local goRight = false
 local length = 160
 local startRow = 1
+local netherMode = false -- if true, the first slot will be a 'fuel' chest
 
 local component = require("component")
 local robot = component.robot
@@ -18,11 +21,15 @@ local generator = component.generator
 local torchCount = 1
 local row = 0
 
+function invMatchesDatabase(slot)
+    return inv.getStackInInternalSlot(slot) and database.get(slot) and inv.getStackInInternalSlot(slot).label == database.get(slot).label
+end
+
 function mine()
     robot.swing(3)
     forward()
     torchCount = torchCount - 1
-    if torchCount == 0 and inv.getStackInInternalSlot(3) and inv.getStackInInternalSlot(3).label == database.get(3).label then
+    if torchCount == 0 and invMatchesDatabase(3) then
         torchCount = 10
         robot.select(3)
         if not robot.place(0) then
@@ -59,12 +66,12 @@ function dumpInv()
     end
 
     -- drop all items
-    if inv.getStackInInternalSlot(3) and inv.getStackInInternalSlot(3).label ~= database.get(3).label then
+    if not invMatchesDatabase(3) then
         -- torches are optional in our robot :)
         robot.select(3)
         robot.drop(0, 64)
     end
-    if inv.getStackInInternalSlot(4) and inv.getStackInInternalSlot(4).label ~= database.get(4).label then
+    if not invMatchesDatabase(4) then
         -- torch chest is optional in our robot :)
         robot.select(4)
         robot.drop(0, 64)
@@ -74,7 +81,7 @@ function dumpInv()
         robot.drop(0, 64)
     end
 
-    -- get ore chest back (making sure we dont accidently mine something else)
+    -- get ore chest back (making sure we dont accidently mine something else, cause gravel exists)
     robot.select(2)
     robot.swing(0)
     while database.get(2).label ~= inv.getStackInInternalSlot(2).label do
@@ -119,103 +126,33 @@ function dumpInv()
     end
 end
 
+
 while true do
+    robot.turn(goRight)
 
-    if startRow > 1 then
-        for i = 1, startRow - 1 do
-            forward()
-            forward()
-            forward()
-        end
+    -- refuel
+    robot.select(1)
+    local coalCount = robot.count()
+    if coalCount > 1 then
+        generator.insert(coalCount - 1)
     end
 
+    torchCount = 10
+    for i = 3, length - 1 do
+        mine()
+    end
     robot.swing(3)
-    robot.turn(rightHalf)
-    row = startRow
 
-    while true do
+    goRight = not goRight
 
-        -- refuel
-        robot.select(1)
-        local coalCount = robot.count()
-        if coalCount > 1 then
-            generator.insert(coalCount - 1)
-        end
+    dumpInv()
+    robot.select(1)
 
-        torchCount = 10
-        for i = 1, length - 3 do
-            mine()
-        end
-        robot.swing(3)
+    robot.turn(goRight)
+    forward()
+    mine()
+    mine()
+    robot.swing(3)
 
-        if homeSide then
-            homeSide = false
-        else
-            homeSide = true
-        end
-
-        dumpInv()
-        robot.select(1)
-
-        -- turn
-        if homeSide then
-            if rightHalf then
-                robot.turn(true)
-            else
-                robot.turn(false)
-            end
-        else
-            if rightHalf then
-                robot.turn(false)
-            else
-                robot.turn(true)
-            end
-        end
-
-        -- forward
-        forward()
-        mine()
-        mine()
-        robot.swing(3)
-
-        -- turn
-        if homeSide then
-            if rightHalf then
-                robot.turn(true)
-            else
-                robot.turn(false)
-            end
-        else
-            if rightHalf then
-                robot.turn(false)
-            else
-                robot.turn(true)
-            end
-        end
-
-        row = row + 1
-
-    end
-
-    -- return to base
-    if rightHalf then
-        robot.turn(false)
-    else
-        robot.turn(true)
-    end
-
-    for i = 1, row - 1 do
-        forward()
-        forward()
-        forward()
-    end
-
-    if rightHalf then
-        robot.turn(false)
-        robot.turn(false)
-    else
-        robot.turn(true)
-        robot.turn(true)
-    end
-    row = 0
+    row = row + 1
 end
