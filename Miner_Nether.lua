@@ -71,6 +71,8 @@ function refuel()
         robot.use(0)
         inv.equip()
         generator.insert()
+        robot.select(2)
+        robot.swing(0)
     end
 end
 
