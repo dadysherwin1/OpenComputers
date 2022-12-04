@@ -10,7 +10,13 @@ local inv = component.inventory_controller
 local generator = component.generator
 local length = 160
 local row = 1
-local goRight = robot.detect(4)
+
+local goRight = false
+robot.turn(true)
+if robot.detect(3) then
+    goRight = true
+end
+robot.turn(false)
 
 function mine()
     robot.swing(3)
