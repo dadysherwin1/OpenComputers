@@ -4,10 +4,10 @@
 
 -- 1 = empty bucket, 2 = ender tank, 3 = ore chest
 
-local component = require("component")
-local robot = component.robot
-local inv = component.inventory_controller
-local generator = component.generator
+local robot = component.proxy(component.list("robot")())
+local inv = component.proxy(component.list("inventory_controller")())
+local generator = component.proxy(component.list("generator")())
+
 local length = 160
 local row = 1
 
