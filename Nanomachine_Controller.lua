@@ -1,3 +1,10 @@
+-- sets up your nanomachines, son
+-- Home PC
+-- Glasses Terminal Card, Network Card T1
+
+-- Absorption gives u invincibility lol
+-- U can get blue music note particles LIKE MIKU!
+
 local glasses = component.proxy(component.list("glasses")())
 local modem = component.proxy(component.list("modem")())
 

@@ -1,5 +1,6 @@
 -- emotional support drone
--- CPU T1, Memory T1.5, Lua EEPROM, 
+-- Drone Case T2
+-- CPU T1, Memory T1.5, EEPROM with this flashed on it 
 -- Inventory Upgrade, Solar Generator Upgrade, Battery Upgrade T1, Particle FX Card, Glasses Terminal Card
 
 -- CONFIGS
