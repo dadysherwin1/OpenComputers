@@ -1,6 +1,6 @@
 Here's some useful stuff
 
-Prefix commands with ' | less' to be able to scroll thru it
+Suffix commands with ' | less' to be able to scroll thru it
 e.g. ls | less
 
 Compress files to fit on a BIOS (Internet card and OPPM required)
