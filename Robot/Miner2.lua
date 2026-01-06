@@ -1,5 +1,4 @@
 -- Makes 1 half of a mine, place a block next to it in the direction you want it to go
--- Chunkloader, Angel Upgrade, Experience Upgrade, Generator Upgrade, 4 Inv Upgrades, Inv Controller Upgrade, Hover (w/ Upgrade Container)
 
 -- This'll be the first thing we make in a server, so here's the specs
 -- The mine should be Y=11 (head level) so the lava pools are on the floor
@@ -28,11 +27,11 @@
         -- Angel Upgrade
         -- Experience Upgrade
         -- 4 Inventory Upgrades
-        -- Upgrade Container
-        -- Hover Upgrade (in upgrade container)
+        -- Upgrade Container T1
+        -- Hover Upgrade T1 (in upgrade container)
         -- 2.5m RF for assembly (500 RF/t takes 4 mins)
     -- Mining:
-            -- Steel Hammer
+            -- Iron (or Steel) Hammer
             -- Fortune/Luck III: 6 stacks of lapis
             -- Mending: Mending Moss (9 Mossy Cobblestone)
         -- 64 Coal
@@ -74,7 +73,7 @@ local row = 1
 
 function placeTorch()
     torchCount = torchCount - 1
-    if torchCount == 0 and robot.count(3) > 1 then
+    if torchCount <= 0 and robot.count(3) > 1 then
         torchCount = 10 -- optimal number to prevent mob spawning
         robot.select(3)
         if not robot.place(0) then

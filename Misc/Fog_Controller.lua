@@ -24,10 +24,10 @@ local widget2 = glasses.addText2D()
 widget2.setText("Switch to Ghost")
 widget2.setFontSize(20)
 widget2.addTranslation(20,240,0)
-local widget3 = glasses.addText2D()
-widget3.setText("Freeze")
-widget3.setFontSize(20)
-widget3.addTranslation(20,260,0)
+-- local widget3 = glasses.addText2D()
+-- widget3.setText("Freeze")
+-- widget3.setFontSize(20)
+-- widget3.addTranslation(20,260,0)
 
 local blocksPlaced = {}
 local isSolid = true
@@ -82,7 +82,7 @@ end
 -- function freeze()
 --     local pos = glasses.getUserPosition()[1]
 --     local x = pos["x"]
---     local y = pos["y"] + 2
+--     local y = pos["y"] + 2edit fo
 --     local z = pos["z"]
 
 --     nanofog_terminal.set(x, y, z, "ice")

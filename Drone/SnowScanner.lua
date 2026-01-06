@@ -1,7 +1,8 @@
--- emotional support drone
--- Drone Case T2
--- CPU T1, Memory T1.5, EEPROM with this flashed on it 
--- Inventory Upgrade, Solar Generator Upgrade, Battery Upgrade T1, Particle FX Card, Glasses Terminal Card
+-- this drones got a Scan function, it can scan ores for ya
+-- its lowkey useless tho cause every ore hsa a hardness of 3
+-- its useful if u wanna find ores that have a higher hardness at least
+-- not completed cause its not useful atm, if ryan wants it for draconium ore or smth then ill finish it
+-- it hits the widget limit atm, fix that
 
 -- CONFIGS
 local unit = 24 -- ui scale
@@ -9,6 +10,7 @@ local unit = 24 -- ui scale
 local drone = component.proxy(component.list("drone")())
 local glasses = component.proxy(component.list("glasses")())
 local particle = component.proxy(component.list("particle")())
+local geo = component.proxy(component.list("geolyzer")())
 
 drone.setLightColor(0x00ffff) -- 009999
 glasses.setTerminalName("Snow")
@@ -29,15 +31,17 @@ local widget2 = glasses.addText2D()
 widget2.setText("Move")
 widget2.setFontSize(unit)
 widget2.addTranslation(unit,unit*3,0)
--- local widget3 = glasses.addText2D()
--- widget3.setText("Use")
--- widget3.setFontSize(20)
--- widget3.addTranslation(20,60,0)
+local widget3 = glasses.addText2D()
+widget3.setText("Scan")
+widget3.setFontSize(unit)
+widget3.addTranslation(unit,unit*4,0)
 
 -- add 3D box to locate lost drones easier
 local box = glasses.addCube3D()
-box.addColor(.6,1,1,.75)
+box.addColor(.6,1,1)
 box.addTranslation(0,-.5,0)
+box.addScale(.3,.3,.3)
+box.setVisibleThroughObjects(true)
 
 function follow()
     if drone.getOffset() <= 1 then
@@ -64,9 +68,47 @@ function move()
     end
 end
 
--- function use()
---     drone.use(0)
--- end
+function tocolor(pl)
+    local minpl = 2
+    local maxpl = 5
+    local color = (pl - minpl) / maxpl
+    if color < 0 then
+        return {1, 1, 1}
+    elseif color > 1 then
+        return {1, 0, 1}
+    else
+        return {color, 1 - color, 0}
+    end
+end
+function create(x, y, z, p)
+    local widget = glasses.addCube3D()
+    widget.addTranslation(x + 0.125, y + 0.125, z + 0.125)
+    widget.addScale(0.75, 0.75, 0.75)
+    widget.setVisibleThroughObjects(true)
+
+    local color = tocolor(p)
+    color[4] = 1
+
+    widget.addColor(table.unpack(color))
+end
+function scan()
+    local size = 16
+    local pl = 3
+    local maxY = 1
+
+    for x = -size, size do
+        for z = -size, size do
+            local tile = geo.scan(x, z)
+            -- os.sleep(0)
+            for Y = -math.min(size, 18), math.min(maxY, 18) do
+                local y = Y + 32
+                if tile[y] > pl then
+                    create(x, Y, z, tile[y])
+                end
+            end
+        end
+    end
+end
 
 while true do
 	local event, _, _, x, y = computer.pullSignal()
@@ -76,7 +118,7 @@ while true do
             particle.spawn("heart",0,0,0)
             widget1.setText("Stop")
             widget2.setText("")
-            -- widget3.setText("")
+            widget3.setText("")
             
             while true do
                 follow()
@@ -92,8 +134,8 @@ while true do
             end
         elseif y >= unit*3 and y <= unit*4 then
             move()
-        -- elseif y >= 60 and y <= 80 then
-        --     use()
+        elseif y >= unit*4 and y <= unit*5 then
+            scan()
         end
     elseif event == "inventory_changed" then
         computer.beep(500, .2)
@@ -102,5 +144,5 @@ while true do
          
     widget1.setText("Follow")
     widget2.setText("Move")
-    -- widget3.setText("Use")
+    widget3.setText("Scan")
 end
